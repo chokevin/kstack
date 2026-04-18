@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# kstack setup — install skills into a supported AI agent's skill dir.
+#
+# Usage:
+#   ./bin/setup               # auto-detect (Copilot CLI first)
+#   ./bin/setup --host copilot
+#   ./bin/setup --host claude
+#   ./bin/setup --host cursor
+#   ./bin/setup --dry-run
+#   ./bin/setup --help
+
+set -euo pipefail
+
+HOST=""
+DRY_RUN=0
+KSTACK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat <<EOF
+kstack setup — install kstack skills into your AI coding agent.
+
+Usage:
+  $0 [--host <copilot|claude|cursor>] [--dry-run]
+
+If --host is omitted, we auto-detect based on which agent dirs exist
+under \$HOME. Copilot CLI takes precedence.
+
+Options:
+  --host <name>   Target a specific agent
+  --dry-run       Print what would happen, change nothing
+  -h, --help      Show this help
+
+Supported hosts:
+  copilot   GitHub Copilot CLI         ~/.copilot/skills/kstack-<name>/
+  claude    Claude Code                ~/.claude/skills/kstack-<name>/
+  cursor    Cursor                     ~/.cursor/skills/kstack-<name>/
+EOF
+}
+
+log()  { printf '[kstack] %s\n' "$*" >&2; }
+run()  { if [[ $DRY_RUN -eq 1 ]]; then printf '[dry-run] %s\n' "$*"; else eval "$*"; fi; }
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --host)     HOST="$2"; shift 2 ;;
+    --dry-run)  DRY_RUN=1; shift ;;
+    -h|--help)  usage; exit 0 ;;
+    *)          log "unknown arg: $1"; usage; exit 2 ;;
+  esac
+done
+
+detect_host() {
+  if [[ -d "$HOME/.copilot" ]]; then echo "copilot"; return; fi
+  if [[ -d "$HOME/.claude" ]];  then echo "claude";  return; fi
+  if [[ -d "$HOME/.cursor" ]];  then echo "cursor";  return; fi
+  echo ""
+}
+
+if [[ -z "$HOST" ]]; then
+  HOST="$(detect_host)"
+  if [[ -z "$HOST" ]]; then
+    log "could not auto-detect an AI agent. Pass --host <copilot|claude|cursor>."
+    exit 1
+  fi
+  log "auto-detected host: $HOST"
+fi
+
+case "$HOST" in
+  copilot) SKILLS_DIR="$HOME/.copilot/skills" ;;
+  claude)  SKILLS_DIR="$HOME/.claude/skills"  ;;
+  cursor)  SKILLS_DIR="$HOME/.cursor/skills"  ;;
+  *)       log "unsupported host: $HOST"; exit 2 ;;
+esac
+
+log "installing kstack skills into: $SKILLS_DIR"
+run "mkdir -p '$SKILLS_DIR'"
+
+count=0
+for skill_dir in "$KSTACK_ROOT"/skills/*/; do
+  name="$(basename "$skill_dir")"
+  target="$SKILLS_DIR/kstack-$name"
+  if [[ -e "$target" && ! -L "$target" ]]; then
+    log "skipping $name — $target exists and is not a symlink"
+    continue
+  fi
+  run "ln -sfn '$skill_dir' '$target'"
+  count=$((count + 1))
+done
+
+log "linked $count skills"
+log "done. Try: /kstack-plan <your ask>  (or load AGENTS.md for skill list)"

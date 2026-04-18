@@ -1,0 +1,6 @@
+.DS_Store
+.shiplight/
+node_modules/
+*.log
+.env
+.env.local
