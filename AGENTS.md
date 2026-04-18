@@ -5,6 +5,7 @@ When this repo is loaded as a skill library (installed at `~/.kstack/` or `~/.co
 ## Available skills
 
 - **`/plan <ask>`** — Tech Lead. Scope, non-goals, SQL todo list. See `skills/plan/SKILL.md`.
+- **`/reckon <service>/<slice>`** — Service Re-evaluator. Honest re-evaluation of a long-lived service. Produces a one-page memo with a binding decision (HARDEN / EXTEND / REFACTOR / DEPRECATE / FREEZE). See `skills/reckon/SKILL.md`.
 - **`/review [ref]`** — Staff Engineer. Rigorous review of changes. See `skills/review/SKILL.md`.
 - **`/investigate <symptom>`** — Debugger. Root-cause methodology. See `skills/investigate/SKILL.md`.
 - **`/ship`** — Release Engineer. Lint → test → commit → push → PR. See `skills/ship/SKILL.md`.
