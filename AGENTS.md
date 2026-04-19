@@ -11,6 +11,10 @@ When this repo is loaded as a skill library (installed at `~/.kstack/` or `~/.co
 - **`/ship`** — Release Engineer. Lint → test → commit → push → PR. See `skills/ship/SKILL.md`.
 - **`/retro`** — Coach. Session retrospective + kstack improvement log. See `skills/retro/SKILL.md`.
 
+### Domain skills (only useful in specific contexts)
+
+- **`/airun-triage <symptom>`** — Distributed Cluster Triage Engineer. Layered triage (Ray → Kueue → k8s scheduler → MIG → node-pool/region) for stuck/failed/slow jobs on the airun multi-region AKS cluster. See `skills/airun-triage/SKILL.md`.
+
 ## Rules when using kstack skills
 
 1. **Read the skill's `SKILL.md` before acting.** Don't improvise a persona — the skill has one.

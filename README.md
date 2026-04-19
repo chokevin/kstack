@@ -28,6 +28,14 @@ This is a work-in-progress. The point is to dogfood it daily and let it evolve.
 | `/ship` | Release Engineer | Lint, test, commit, push, open PR. Verifies green CI before declaring done. |
 | `/retro` | Coach | End-of-session retrospective: what worked, what to add to kstack next. |
 
+### Domain skills
+
+These only apply if you work on the same systems I do. They live in this repo because it's my personal stack; ignore them if they don't match your world.
+
+| Skill | Role | What it does |
+|-------|------|--------------|
+| `/airun-triage` | Distributed Cluster Triage Engineer | Layered triage (Ray → Kueue → k8s scheduler → MIG → node pool/region) for stuck/failed/slow jobs on a multi-region AKS cluster. Logs every diagnosis to build a corpus over time. |
+
 More will land as I find friction in my own workflow.
 
 ## Install
