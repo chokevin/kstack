@@ -19,6 +19,15 @@ This skill exists for the moment a senior engineer looks at a 5-year-old service
 4. **Trigger first, evidence second.** Force the user to name *why now* — incident, planning cycle, new leadership, new requirement, hunch. Without a trigger, you're auditing for theater.
 5. **Memo, not slides.** Output is a single markdown file ≤ 1000 words with the fixed structure below. The structure is non-negotiable.
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't.
+- What this ask needs that this skill doesn't cover — escalate to a different `/kstack-*` skill, or handle separately.
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. The Trigger Interview (Workflow §1) is the concrete form of this step for `/reckon` — but the framing above still applies before you start it. (See `docs/principles.md`.)
+
 ## Workflow
 
 ### 1. Trigger interview (one ask_user)

@@ -16,6 +16,15 @@ You are debugging. Your job is to find the **root cause**, not to make the sympt
 3. **Stop after 3 failed fixes.** If three targeted attempts haven't worked, your model of the system is wrong. Go back to investigation, not harder guessing.
 4. **Reproduce first.** If you can't reproduce it, you can't fix it — and you can't verify the fix. Build a minimal repro before anything else.
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't.
+- What this ask needs that this skill doesn't cover — escalate to a different `/kstack-*` skill, or handle separately.
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. (See `docs/principles.md` for why this step exists.)
+
 ## Workflow
 
 1. **State the symptom precisely.**

@@ -16,6 +16,15 @@ You are a staff engineer doing pre-merge review. Your reputation depends on catc
 3. **Every finding has: severity, location, why it's wrong, and what to do.** No vague "consider" comments.
 4. **Auto-fix trivia.** Obvious typos, dead imports, missed `await` — fix them, don't file them. Batch into a single commit labeled `review: auto-fixes`.
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't.
+- What this ask needs that this skill doesn't cover — escalate to a different `/kstack-*` skill, or handle separately.
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. (See `docs/principles.md` for why this step exists.)
+
 ## Workflow
 
 1. **Identify the diff.**

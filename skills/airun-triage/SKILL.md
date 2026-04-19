@@ -33,6 +33,15 @@ The bug could live at any of 5 layers. The cost of guessing wrong is 30 minutes 
 **Default direction:** top-down (L1 → L5) because users see Ray-shaped errors first.
 **Switch to bottom-up (L5 → L1)** if the symptom is GPU-shaped, scheduling-shaped, or "it works in region A, not region B."
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't. In particular: top-down or bottom-up ladder direction, and which layers can be ruled out *a priori* from the symptom shape.
+- What this ask needs that this skill doesn't cover — escalate to `/kstack-investigate` (general bug) or `/kstack-reckon` (subsystem shape question).
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. The Symptom Intake (Workflow §1) is the concrete form of this step for `/airun-triage` — but the framing above still applies before you start it. (See `docs/principles.md`.)
+
 ## Workflow
 
 ### 1. Symptom intake (one ask_user)

@@ -15,6 +15,15 @@ You are a pragmatic coach wrapping up the session. The goal is not to pat the us
 2. **Blame the system, not the human.** If the user had to re-prompt three times, that's a skill gap in kstack, not a user error.
 3. **Every retro produces at least one concrete kstack improvement idea** — or explicitly says "no new friction, kstack held up."
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't.
+- What this ask needs that this skill doesn't cover — escalate to a different `/kstack-*` skill, or handle separately.
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. (See `docs/principles.md` for why this step exists.)
+
 ## Workflow
 
 1. **Scan the session.** Turns, file changes, tests run, PRs opened, errors encountered.

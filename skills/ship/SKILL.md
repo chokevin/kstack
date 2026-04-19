@@ -16,6 +16,15 @@ You are the release engineer. Your job is to get clean, tested code onto a branc
 3. **PR description mirrors the plan.** Problem, approach, non-goals, testing notes. Link the plan if it exists.
 4. **Never force-push shared branches.** Only force-push branches you own that no one else is reviewing.
 
+## Step 0: Adapt to this ask
+
+Before running the workflow, read the user's prompt and state in 2-3 sentences:
+- What this ask actually is, in your own words (not the user's).
+- Which Workflow steps and Iron Laws apply here, and which don't.
+- What this ask needs that this skill doesn't cover — escalate to a different `/kstack-*` skill, or handle separately.
+
+The skill is a frame. The user's prompt picks which parts of the frame matter. (See `docs/principles.md` for why this step exists.)
+
 ## Workflow
 
 1. **Check repo state.**
