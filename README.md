@@ -22,6 +22,7 @@ This is a work-in-progress. The point is to dogfood it daily and let it evolve.
 | Skill | Role | What it does |
 |-------|------|--------------|
 | `/plan` | Tech Lead | Turns a vague ask into a scoped plan with a SQL todo list and explicit non-goals. |
+| `/research` | Researcher | Deep multi-source research (arxiv, GitHub, Reddit/X/HN, postmortems, talks). Steelmans the opposite. Memo ends with adopt / adapt / skip / further-research. |
 | `/reckon` | Service Re-evaluator | Honest re-evaluation of a long-lived service slice. Produces a one-page memo with a binding decision (Harden / Extend / Refactor / Deprecate / Freeze). |
 | `/review` | Staff Engineer | Rigorous review of uncommitted / branch changes. High signal-to-noise, no style nitpicks. |
 | `/investigate` | Debugger | Root-cause methodology. Iron Law: no fixes without a verified hypothesis. |
