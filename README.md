@@ -26,6 +26,8 @@ This is a work-in-progress. The point is to dogfood it daily and let it evolve.
 | `/reckon` | Service Re-evaluator | Honest re-evaluation of a long-lived service slice. Produces a one-page memo with a binding decision (Harden / Extend / Refactor / Deprecate / Freeze). |
 | `/review` | Staff Engineer | Rigorous review of uncommitted / branch changes. High signal-to-noise, no style nitpicks. |
 | `/investigate` | Debugger | Root-cause methodology. Iron Law: no fixes without a verified hypothesis. |
+| `/explore` | Subagent Foreman | Fan out parallel read-only subagents to map a codebase / spec an API surface / compare alternatives without burning the main context. |
+| `/unstuck` | Loop-breaker | You're spinning. Same fix, same error, three iterations in. Stops the loop, names it, forces a layer change. |
 | `/ship` | Release Engineer | Lint, test, commit, push, open PR. Verifies green CI before declaring done. |
 | `/retro` | Coach | End-of-session retrospective: what worked, what to add to kstack next. |
 
@@ -36,6 +38,10 @@ These only apply if you work on the same systems I do. They live in this repo be
 | Skill | Role | What it does |
 |-------|------|--------------|
 | `/airun-triage` | Distributed Cluster Triage Engineer | Layered triage (Ray → Kueue → k8s scheduler → MIG → node pool/region) for stuck/failed/slow jobs on a multi-region AKS cluster. Logs every diagnosis to build a corpus over time. |
+| `/kernel-recall` | Kernel Optimization Archivist | Searches the local `kevin-obsidian` vault for prior GPU/ML-kernel optimization notes, benchmark results, profiling lessons, and experiment history. |
+| `/obsidian-improve` | Obsidian Context Gardener | Edits the local `kevin-obsidian` vault to improve context loading: indexes, context cards, promoted learnings, and validation. |
+| `/obsidian-crystallize` | Obsidian Knowledge Crystallizer | Mines raw vault material and routes durable knowledge to the right home: learnings, context cards, context maps, research, reckonings, or retros. |
+| `/upstream-friction` | Integration Boundary Architect | Finds downstream hacks that should be upstream contract fixes, forces an owner decision, and prevents workaround sprawl. |
 
 More will land as I find friction in my own workflow.
 
