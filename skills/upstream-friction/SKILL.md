@@ -37,21 +37,39 @@ For Rune-shaped work, default boundary:
 
 ### 1. Load context
 
+Resolve the vault path first:
+
+```bash
+VAULT="${VAULT_PATH:-}"
+if [ -z "$VAULT" ]; then
+  for candidate in "$HOME/dev/kevin-obsidian" /work/dev/kevin-obsidian /opt/data/obsidian; do
+    if [ -d "$candidate" ]; then
+      VAULT="$candidate"
+      break
+    fi
+  done
+fi
+if [ ! -d "$VAULT" ]; then
+  echo "missing vault; set VAULT_PATH or clone kevin-obsidian under ~/dev or /work/dev"
+  exit 1
+fi
+```
+
 Read the relevant context first:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/contexts/aks-ai-runtime-context.md
-/Users/chokevin/dev/kevin-obsidian/contexts/voice-agent-context.md
-/Users/chokevin/dev/kevin-obsidian/learnings/rune-as-researcher-contract.md
+$VAULT/contexts/aks-ai-runtime-context.md
+$VAULT/contexts/voice-agent-context.md
+$VAULT/learnings/rune-as-researcher-contract.md
 ```
 
 Then load the relevant project cards:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/projects/ai2.md
-/Users/chokevin/dev/kevin-obsidian/projects/aurora-research.md
-/Users/chokevin/dev/kevin-obsidian/projects/voice-agent.md
-/Users/chokevin/dev/kevin-obsidian/projects/swordfish.md
+$VAULT/projects/ai2.md
+$VAULT/projects/aurora-research.md
+$VAULT/projects/voice-agent.md
+$VAULT/projects/swordfish.md
 ```
 
 If working in a real repo, inspect the actual diff before advising. Do not infer friction from memory alone.
@@ -115,7 +133,7 @@ If the current plan is a downstream hack and the decision is `UPSTREAM_FIX`, do 
 If the same friction pattern is likely to recur, write or update a learning in `kevin-obsidian`:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/learnings/<slug>.md
+$VAULT/learnings/<slug>.md
 ```
 
 Examples:

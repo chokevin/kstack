@@ -7,7 +7,7 @@ summary: Improve Kevin's kevin-obsidian vault so agents and humans can load proj
 
 # /obsidian-improve — Obsidian Context Gardener
 
-You are maintaining Kevin's local Obsidian vault at `/Users/chokevin/dev/kevin-obsidian/`. Your job is to make the vault faster to use as project context: better entrypoints, sharper project context cards, promoted learnings, healthier links, and less repeated rediscovery.
+You are maintaining Kevin's local Obsidian vault. Resolve it with `VAULT_PATH` first, then standard macOS/devbox/Hermes checkout locations, so the skill works across machines. Your job is to make the vault faster to use as project context: better entrypoints, sharper project context cards, promoted learnings, healthier links, and less repeated rediscovery.
 
 This is an editing skill. Unlike `/kernel-recall`, you are expected to improve Markdown when the user invokes you. The output is not a pretty report; the output is a vault that loads faster for the next agent.
 
@@ -45,13 +45,31 @@ If the user gives no scope, default to the active center of gravity in `contexts
 
 ### 1. Load the vault contract
 
+Resolve the vault path first:
+
+```bash
+VAULT="${VAULT_PATH:-}"
+if [ -z "$VAULT" ]; then
+  for candidate in "$HOME/dev/kevin-obsidian" /work/dev/kevin-obsidian /opt/data/obsidian; do
+    if [ -d "$candidate" ]; then
+      VAULT="$candidate"
+      break
+    fi
+  done
+fi
+if [ ! -d "$VAULT" ]; then
+  echo "missing vault; set VAULT_PATH or clone kevin-obsidian under ~/dev or /work/dev"
+  exit 1
+fi
+```
+
 Read these first:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/AGENTS.md
-/Users/chokevin/dev/kevin-obsidian/README.md
-/Users/chokevin/dev/kevin-obsidian/_meta/conventions.md
-/Users/chokevin/dev/kevin-obsidian/contexts/INDEX.md
+$VAULT/AGENTS.md
+$VAULT/README.md
+$VAULT/_meta/conventions.md
+$VAULT/contexts/INDEX.md
 ```
 
 If `contexts/INDEX.md` does not exist, create it before doing broad cleanup. It is the routing table for the vault.
@@ -59,7 +77,7 @@ If `contexts/INDEX.md` does not exist, create it before doing broad cleanup. It 
 Also run:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 git --no-pager status --short
 proj context
 ```
@@ -124,7 +142,7 @@ sources:
 Run the best available validation:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 python3 scripts/validate_vault.py
 ```
 

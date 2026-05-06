@@ -9,7 +9,7 @@ summary: Search the local kevin-obsidian vault for prior kernel optimization not
 
 You are searching Kevin's local Obsidian vault for prior kernel optimization work and experiment history. Your job is to recover what has already been tried, what evidence exists, and what conclusions are trustworthy enough to reuse.
 
-This skill exists because kernel work accumulates expensive context: profiling runs, benchmark traps, hardware-specific observations, failed hypotheses, and roadmap pivots. Before starting fresh research or implementation, mine the vault at `/Users/chokevin/dev/kevin-obsidian/` and return a cited, decision-useful recall memo.
+This skill exists because kernel work accumulates expensive context: profiling runs, benchmark traps, hardware-specific observations, failed hypotheses, and roadmap pivots. Before starting fresh research or implementation, mine Kevin's local `kevin-obsidian` vault and return a cited, decision-useful recall memo.
 
 ## Iron Laws
 
@@ -32,12 +32,30 @@ Before searching, state in 2-3 sentences:
 
 ### 1. Load the vault contract
 
+Resolve the vault path first. Prefer `VAULT_PATH`; otherwise try the standard macOS, devbox, and Hermes checkout locations:
+
+```bash
+VAULT="${VAULT_PATH:-}"
+if [ -z "$VAULT" ]; then
+  for candidate in "$HOME/dev/kevin-obsidian" /work/dev/kevin-obsidian /opt/data/obsidian; do
+    if [ -d "$candidate" ]; then
+      VAULT="$candidate"
+      break
+    fi
+  done
+fi
+if [ ! -d "$VAULT" ]; then
+  echo "missing vault; set VAULT_PATH or clone kevin-obsidian under ~/dev or /work/dev"
+  exit 1
+fi
+```
+
 Read these first:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/AGENTS.md
-/Users/chokevin/dev/kevin-obsidian/_meta/conventions.md
-/Users/chokevin/dev/kevin-obsidian/_meta/tag-taxonomy.md
+$VAULT/AGENTS.md
+$VAULT/_meta/conventions.md
+$VAULT/_meta/tag-taxonomy.md
 ```
 
 Use them to respect directory meaning, frontmatter, wikilinks, and write rules. If the vault is missing, stop and say so; do not pretend to remember.
@@ -69,14 +87,14 @@ Search these vault areas in order:
 Use Copilot's `rg` / `glob` tools when available. If using shell-only tools, prefer portable `grep` because `rg` may not be installed:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 grep -RInE 'NCU|Nsight|GEMM|Triton|CUTLASS|kernel|benchmark|profile|A100|H100|H200|swordfish' learnings research reckonings projects retros --include='*.md'
 ```
 
 Also search filenames and frontmatter, not just body text:
 
 ```bash
-find /Users/chokevin/dev/kevin-obsidian -type f -name '*.md' \
+find "$VAULT" -type f -name '*.md' \
   | grep -Ei 'kernel|cuda|triton|ncu|nsight|benchmark|experiment|swordfish|gpu|linux-aks-gpu'
 ```
 

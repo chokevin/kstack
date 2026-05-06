@@ -7,7 +7,7 @@ summary: Mine Kevin's kevin-obsidian vault for meaningful information and place 
 
 # /obsidian-crystallize — Obsidian Knowledge Crystallizer
 
-You are turning Kevin's local Obsidian vault from raw memory into reusable knowledge. The vault lives at `/Users/chokevin/dev/kevin-obsidian/`. Your job is to extract meaningful information from project logs, context maps, research memos, and prior learnings, then place each distilled fact in the right location so future agents and humans can reference it quickly.
+You are turning Kevin's local Obsidian vault from raw memory into reusable knowledge. Resolve the vault with `VAULT_PATH` first, then standard macOS/devbox/Hermes checkout locations, so the skill works across machines. Your job is to extract meaningful information from project logs, context maps, research memos, and prior learnings, then place each distilled fact in the right location so future agents and humans can reference it quickly.
 
 This skill is not "summarize everything." It is selective crystallization: durable facts, decisions, gotchas, patterns, current state, and cross-project relationships.
 
@@ -86,20 +86,38 @@ Do not promote when the note is merely a date-stamped activity, a one-off implem
 
 ### 1. Load the vault contract
 
+Resolve the vault path first:
+
+```bash
+VAULT="${VAULT_PATH:-}"
+if [ -z "$VAULT" ]; then
+  for candidate in "$HOME/dev/kevin-obsidian" /work/dev/kevin-obsidian /opt/data/obsidian; do
+    if [ -d "$candidate" ]; then
+      VAULT="$candidate"
+      break
+    fi
+  done
+fi
+if [ ! -d "$VAULT" ]; then
+  echo "missing vault; set VAULT_PATH or clone kevin-obsidian under ~/dev or /work/dev"
+  exit 1
+fi
+```
+
 Read these first:
 
 ```text
-/Users/chokevin/dev/kevin-obsidian/AGENTS.md
-/Users/chokevin/dev/kevin-obsidian/README.md
-/Users/chokevin/dev/kevin-obsidian/_meta/conventions.md
-/Users/chokevin/dev/kevin-obsidian/_meta/tag-taxonomy.md
-/Users/chokevin/dev/kevin-obsidian/contexts/INDEX.md
+$VAULT/AGENTS.md
+$VAULT/README.md
+$VAULT/_meta/conventions.md
+$VAULT/_meta/tag-taxonomy.md
+$VAULT/contexts/INDEX.md
 ```
 
 Then check state:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 git --no-pager status --short
 proj context
 ```
@@ -135,7 +153,7 @@ For each candidate, write a one-line thesis and route. Drop low-value candidates
 Before writing new learnings, dedupe against existing crystals:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 grep -RInE '<key terms from candidate>' learnings contexts projects --include='*.md'
 ```
 
@@ -200,7 +218,7 @@ After writing crystals, update only the routing surfaces that benefit:
 Run:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 python3 scripts/validate_vault.py
 ```
 
@@ -221,7 +239,7 @@ If the batch created a reusable insight about the crystallization process itself
 Crystallization changes are only useful to future agents in other codebases after the vault is published. After validation and `proj log`, commit and push the vault:
 
 ```bash
-cd /Users/chokevin/dev/kevin-obsidian
+cd "$VAULT"
 git --no-pager status --short
 git branch --show-current
 git add <files touched by this batch>
