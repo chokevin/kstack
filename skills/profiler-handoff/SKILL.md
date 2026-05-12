@@ -16,7 +16,7 @@ This skill exists because "here is a trace path" is not useful after the session
 1. **Raw profile plus summary, always.** Never hand off only a screenshot, PNG preview, or Slack sentence. Include the raw trace/export/report and a markdown summary that explains what was run.
 2. **Name files for the classifier.** Use suffixes and names Hermes understands: `*.pt.trace.json`, `*.trace.json(.gz)`, `*.pftrace`, `*.nsys-rep`, `*.ncu-rep`, `nsys_*.csv`, `ncu_*.csv`, `hta_trace*.tar.gz`, `model.onnx`, `model_graph.dot`, `model_graph.svg/png`.
 3. **Context is data.** A profile without command, repo/commit, hardware, framework versions, workload shape, dtype, batch/sequence sizes, and top metrics is incomplete.
-4. **Hermes must be able to read it.** Prefer artifacts already on the machine emitting `copilot-hub`. If the path will not exist in the Hermes runtime, include a small markdown/CSV/JSON summary artifact that contains the important data and note where the raw artifact lives.
+4. **Hermes must be able to read it.** `copilot-hub artifact-handoff` embeds small artifacts as `content_base64`; use that default for summaries/CSV/JSON and any small trace/export. If a raw artifact is too large to inline, include an inline summary/metrics file and note where the raw artifact lives.
 5. **Verify the event, not just the command.** After emitting, check that the hub event is `artifact_handoff` and that profiler/model graph metadata was inferred.
 
 ## Step 0: Adapt to this ask
@@ -120,6 +120,10 @@ copilot-hub artifact-handoff "${TMUX_SESSION:?missing TMUX_SESSION}" \
 
 Use `--artifact` once per file. Omit artifacts that do not exist; do not pass broken paths. If `$TMUX_SESSION` or `copilot-hub` is unavailable, keep the bundle as the local source of truth and report the exact command that should be run later.
 
+Do not add `--no-inline-artifacts` unless Hermes can read the exact same paths.
+Devbox paths like `/work/dev/...` do not exist in the Hermes pod, so the inline
+payload is what lets Hermes materialize Slack attachments.
+
 ### 5. Verify classification
 
 After emitting, inspect recent events:
@@ -144,7 +148,7 @@ If classification is wrong, fix the filename or add a summary/metrics artifact a
 ## Anti-patterns
 
 - Sending only `profile.png` or `screenshot.png` with no raw trace/export.
-- Sending only a path on a machine Hermes cannot access, with no summary or metrics artifact.
+- Sending only a path on a machine Hermes cannot access, with no inline `content_base64`, summary, or metrics artifact.
 - Using generic filenames like `output.json`, `report.csv`, or `graph.svg` when the file is really a PyTorch trace, Nsight export, or model graph.
 - Mixing unrelated runs into one handoff without a manifest explaining each run.
 - Omitting command, commit, hardware, dtype, shape, batch size, or metric source.
