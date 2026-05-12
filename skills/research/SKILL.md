@@ -191,3 +191,19 @@ Tell the user:
 - Source-type playbook is a starting point, not a rule. A question about a CNCF project's HA story should hit the project's KEPs and incident retros heavily; a question about ML training research should be paper-heavy. Adapt.
 - The 90-minute budget is a soft cap, not a hard one. If you hit it and the answer is genuinely close, ask the user for a 30-min extension. If you hit it and you're nowhere near, decide FURTHER-RESEARCH and write what's needed.
 - The bounded-gain truth from `docs/principles.md` applies: even great research only buys you ~10-15% better decisions. Don't expect /research to make a bad question well-answerable. Garbage question, garbage memo.
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

@@ -290,3 +290,19 @@ Left raw: <what you intentionally did not promote>.
 - High-value crystals are discoverable from `contexts/` or `learnings/INDEX.md`.
 - Validation ran and the final answer states the result.
 - The vault batch was committed and pushed to `main`, or the blocker is explicit.
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

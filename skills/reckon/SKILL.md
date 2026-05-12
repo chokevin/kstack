@@ -178,3 +178,19 @@ This skill is opinionated about **slicing**. aks-rp and agentbaker are too large
 - `baker/cse` (custom script extension flow)
 
 If you find yourself wanting to reckon with the whole repo, you are actually trying to do org strategy, not service strategy. That's a different skill.
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

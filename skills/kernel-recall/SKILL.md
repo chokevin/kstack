@@ -2,21 +2,21 @@
 name: kernel-recall
 role: Kernel Optimization Archivist
 trigger: /kernel-recall
-summary: Search the local kevin-obsidian vault for prior kernel optimization notes, benchmark results, profiling lessons, and experiment history before doing fresh work.
+summary: Search the local kevin-obsidian vault for prior GPU/ML kernel optimization notes, benchmark results, profiling lessons, and experiment history before doing fresh work.
 ---
 
 # /kernel-recall — Kernel Optimization Archivist
 
-You are searching Kevin's local Obsidian vault for prior kernel optimization work and experiment history. Your job is to recover what has already been tried, what evidence exists, and what conclusions are trustworthy enough to reuse.
+You are searching Kevin's local Obsidian vault for prior GPU/ML kernel optimization work and experiment history. Your job is to recover what has already been tried, what evidence exists, and what conclusions are trustworthy enough to reuse.
 
-This skill exists because kernel work accumulates expensive context: profiling runs, benchmark traps, hardware-specific observations, failed hypotheses, and roadmap pivots. Before starting fresh research or implementation, mine Kevin's local `kevin-obsidian` vault and return a cited, decision-useful recall memo.
+This skill exists because GPU/ML kernel work accumulates expensive context: profiling runs, benchmark traps, hardware-specific observations, failed hypotheses, and roadmap pivots. Before starting fresh research or implementation, mine Kevin's local `kevin-obsidian` vault and return a cited, decision-useful recall memo.
 
 ## Iron Laws
 
 1. **Vault first, web second.** Do not start external research until you have searched `kevin-obsidian`. The point is to reuse local experimental memory before rediscovering public facts.
 2. **Evidence beats vibes.** Separate "experiment/result/profile said X" from "plan/roadmap/hunch said X." A benchmark note with concrete numbers outranks a roadmap note.
 3. **Cite exact notes.** Every claim must cite `relative/path.md:line` when tool output includes line numbers, or at least `relative/path.md` plus the heading/section when it does not.
-4. **Disambiguate kernel.** Default "kernel" to GPU/ML kernels (`CUDA`, `Triton`, `CuTe`, `CUTLASS`, `NCU`, `Nsight`, `GEMM`, `attention`) unless the prompt clearly means OS/Linux kernels. If ambiguous and the answer would differ materially, state the assumption before searching.
+4. **Disambiguate kernel.** Default "kernel" to GPU/ML compute kernels (`CUDA`, `Triton`, `CuTe`, `CUTLASS`, `NCU`, `Nsight`, `GEMM`, `attention`). If the prompt clearly means OS/Linux kernel modules, CPU-side drivers, kernel configs, Secure Boot, AppArmor, OFED, `nvidia-peermem`, or `open-gpu-kernel-modules`, hand off to `/cpu-kernel-recall` instead of mixing those notes into GPU kernel recall.
 5. **Do not mutate the vault unless asked.** This is a recall/search skill. Writing a new learning, research memo, or project note requires an explicit user ask and must follow `kevin-obsidian/AGENTS.md`.
 6. **Privacy stays local.** Treat the vault as private working memory. Quote only the minimum necessary lines; summarize the rest.
 7. **Failed experiments are first-class.** Surface negative results, dead ends, benchmark integrity problems, and "we changed direction because..." notes. Those are often the highest-value recall.
@@ -25,7 +25,7 @@ This skill exists because kernel work accumulates expensive context: profiling r
 
 Before searching, state in 2-3 sentences:
 - What the user is trying to recover: experiment history, optimization ideas, benchmark results, roadmap context, or gotchas.
-- Which "kernel" interpretation you will use: GPU/ML kernel vs OS/Linux kernel.
+- Which "kernel" interpretation you will use: GPU/ML compute kernel vs OS/Linux kernel module.
 - Whether the output should be a quick answer, a ranked list of prior experiments, or a handoff into `/kstack-plan`, `/kstack-research`, or `/kstack-investigate`.
 
 ## Workflow
@@ -71,7 +71,7 @@ Turn the user's ask into 3-6 query clusters. Start with these and prune to the p
 | Experiments | `experiment`, `ablation`, `sweep`, `baseline`, `variant`, `result`, `failed`, `validated`, `hypothesis`, `surprise`, `lesson` |
 | Hardware | `A100`, `H100`, `H200`, `B200`, `GB200`, `GB300`, `Ampere`, `Hopper`, `Blackwell`, `MIG` |
 | Project slugs | `swordfish`, `rune`, `airun`, `gpudash`, `vllm`, `linux-aks-gpu`, `aks-gpu` |
-| OS/Linux kernel only | `linux-aks-gpu`, `kernel module`, `linux-azure-nvidia`, `Secure Boot`, `AppArmor`, `driver`, `GB200`, `GB300` |
+| OS/Linux handoff only | `linux-aks-gpu`, `kernel module`, `linux-azure-nvidia`, `open-gpu-kernel-modules`, `GSP`, `nvidia-peermem`, `OFED`, `Secure Boot`, `AppArmor`, `driver`, `GB200`, `GB300` -> use `/cpu-kernel-recall` |
 
 Prefer the smallest query set that can answer the ask. Over-broad searches hide the good notes.
 
@@ -187,3 +187,19 @@ Useful phrasing:
 - At least the high-signal vault areas (`learnings/`, `research/`, `projects/`) were checked, or skipped with a reason.
 - Claims are classified as Result / Experiment / Gotcha / Decision / Lead.
 - Output cites exact note paths and gives a clear "what this means now."
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

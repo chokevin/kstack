@@ -141,3 +141,19 @@ Hard cap: **3 rounds**. If you're at round 3 and still finding new questions, th
 - Composes naturally with `/kstack-research` (which is allowed to call `/explore` for its breadth pass), `/kstack-investigate` (which can fan out parallel "where does this value come from?" probes), and `/kstack-reckon` (which can fan out per-axis investigation of a service slice).
 - The bounded-gain truth from `docs/principles.md` applies harder here than anywhere else: the upper bound on how much an agent can do is set by context, attention, and recovery. `/explore` directly buys back context budget. Use it on the right questions and the rest of the session breathes.
 - If you find yourself wanting to use `/explore` on every question, you're over-applying. Most asks fit comfortably in the main thread. `/explore` is for the genuinely sprawling ones — codebase mapping, multi-repo audits, comparison matrices.
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

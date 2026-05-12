@@ -123,3 +123,19 @@ In all three cases, the LOOP block from step 2 is in the chat history so the use
 - Most loops the user catches are loops the agent didn't notice it was in. That's a feature of agent confidence, not a bug — but it does mean the user typing `/unstuck` is high-signal. Take it seriously; don't dismiss with "I think I almost have it."
 - A productive `/unstuck` often *kills* the current approach entirely. That's fine. Sunk cost on three failed attempts is not a reason to make a fourth.
 - Compose with `/kstack-investigate` (when the root cause is unclear), `/kstack-research` (when knowledge is outdated), and `/kstack-explore` (when you need to fan out parallel investigations to find a fresh angle).
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

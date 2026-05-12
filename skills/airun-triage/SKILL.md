@@ -178,3 +178,19 @@ After ~10 entries, run `/kstack-retro` against this log. The pattern of `Initial
 - The diagnostic commands at each layer are placeholders in v0. Fill them in with the exact commands you actually use as you triage real incidents. The skill is a frame; the commands are yours.
 - The triage log is the most important output. The skill is built on the assumption you don't yet know which layer fools you most. Ten honest entries from real triage will teach you (and the skill) more than any upfront opinion.
 - If you find yourself running this skill on something that *isn't* a stuck/failed/slow job — wrong skill. This is for "the workload isn't doing what it should." Use `/kstack-investigate` for general bugs, `/kstack-reckon` for "is this subsystem still the right shape?"
+
+## Copilot Hub artifact handoff
+
+When this skill produces a durable artifact that Hermes should see (plan, memo, report, benchmark CSV, chart/image, PDF/HTML, or log), emit the explicit Copilot Hub artifact contract after saving it:
+
+```bash
+copilot-hub artifact-handoff "$TMUX_SESSION" \
+  --title "<short artifact title>" \
+  --summary "<what Hermes should know>" \
+  --intent "<why this artifact exists / requested next action>" \
+  --audience hermes \
+  --priority normal \
+  --artifact path/to/artifact
+```
+
+Use `--artifact` once per file. If `copilot-hub` or `$TMUX_SESSION` is unavailable, do not fail the skill; mention that the local artifact is the source of truth.

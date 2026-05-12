@@ -18,6 +18,8 @@ When this repo is loaded as a skill library (installed at `~/.kstack/` or `~/.co
 
 - **`/airun-triage <symptom>`** — Distributed Cluster Triage Engineer. Layered triage (Ray → Kueue → k8s scheduler → MIG → node-pool/region) for stuck/failed/slow jobs on the airun multi-region AKS cluster. See `skills/airun-triage/SKILL.md`.
 - **`/kernel-recall <question>`** — Kernel Optimization Archivist. Searches the local `kevin-obsidian` vault for prior GPU/ML-kernel optimization notes, benchmark results, profiling lessons, and experiment history. See `skills/kernel-recall/SKILL.md`.
+- **`/cpu-kernel-recall <question>`** — OS/Linux Kernel Module Archivist. Searches local memory and source references for CPU/host kernel modules, Linux driver configs, Secure Boot/AppArmor, OFED/MOFED, and driver-runtime gotchas that can confound GPU benchmarks. See `skills/cpu-kernel-recall/SKILL.md`.
+- **`/profiler-handoff <profile/artifacts>`** — Profiler Artifact Release Engineer. Packages PyTorch/Perfetto/Nsight/HTA profiler results and torchview/Netron/Graphviz model graphs into Hermes-ready `artifact_handoff` events. See `skills/profiler-handoff/SKILL.md`.
 - **`/obsidian-improve [scope]`** — Obsidian Context Gardener. Edits the local `kevin-obsidian` vault to improve fast context loading: indexes, context cards, promoted learnings, and validation. See `skills/obsidian-improve/SKILL.md`.
 - **`/obsidian-crystallize [scope]`** — Obsidian Knowledge Crystallizer. Mines raw vault material and routes durable knowledge to the right home: learnings, context cards, context maps, research, reckonings, or retros. See `skills/obsidian-crystallize/SKILL.md`.
 - **`/upstream-friction <boundary>`** — Integration Boundary Architect. Finds downstream hacks that should be upstream contract fixes, forces an owner decision, and prevents workaround sprawl. See `skills/upstream-friction/SKILL.md`.
@@ -40,7 +42,9 @@ Use these even when the user does not spell out the slash command:
 | Hard-won fix, surprising benchmark, costly gotcha, non-obvious decision, or solved >15 minute problem | `/obsidian-crystallize` before ending. |
 | Downstream repo is adding a workaround for an upstream platform/API/tooling gap | `/upstream-friction`. |
 | Vault/project context feels stale, hard to navigate, or too log-heavy | `/obsidian-improve`. |
-| GPU/kernel/performance work starts | `/kernel-recall` before fresh work. |
+| GPU/ML compute-kernel or performance work starts | `/kernel-recall` before fresh work. |
+| Profiler trace/export/result or model graph should be sent to Hermes | `/profiler-handoff` before emitting the artifact handoff. |
+| OS/Linux kernel module, CPU-side driver, kernel config, Secure Boot/AppArmor, OFED/MOFED, or `open-gpu-kernel-modules` work starts | `/cpu-kernel-recall` before fresh work. |
 | Agent/skill workflow friction appears | `/retro`. |
 
 Do not turn every session into a vault update. `proj log` routine progress; crystallize only reusable knowledge.

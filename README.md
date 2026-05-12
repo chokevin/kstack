@@ -39,6 +39,8 @@ These only apply if you work on the same systems I do. They live in this repo be
 |-------|------|--------------|
 | `/airun-triage` | Distributed Cluster Triage Engineer | Layered triage (Ray → Kueue → k8s scheduler → MIG → node pool/region) for stuck/failed/slow jobs on a multi-region AKS cluster. Logs every diagnosis to build a corpus over time. |
 | `/kernel-recall` | Kernel Optimization Archivist | Searches the local `kevin-obsidian` vault for prior GPU/ML-kernel optimization notes, benchmark results, profiling lessons, and experiment history. |
+| `/cpu-kernel-recall` | OS/Linux Kernel Module Archivist | Searches local memory and source references for CPU/host kernel modules, Linux driver configs, Secure Boot/AppArmor, OFED/MOFED, and driver-runtime gotchas that can confound GPU benchmarks. |
+| `/profiler-handoff` | Profiler Artifact Release Engineer | Packages PyTorch/Perfetto/Nsight/HTA profiler results and torchview/Netron/Graphviz model graphs into Hermes-ready `artifact_handoff` events. |
 | `/obsidian-improve` | Obsidian Context Gardener | Edits the local `kevin-obsidian` vault to improve context loading: indexes, context cards, promoted learnings, and validation. |
 | `/obsidian-crystallize` | Obsidian Knowledge Crystallizer | Mines raw vault material and routes durable knowledge to the right home: learnings, context cards, context maps, research, reckonings, or retros. |
 | `/upstream-friction` | Integration Boundary Architect | Finds downstream hacks that should be upstream contract fixes, forces an owner decision, and prevents workaround sprawl. |
