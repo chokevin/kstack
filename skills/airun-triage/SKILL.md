@@ -19,6 +19,7 @@ The bug could live at any of 5 layers. The cost of guessing wrong is 30 minutes 
 3. **One symptom, one ladder.** If multiple jobs are failing differently (one OOM, one pending, one hung), run the skill once per symptom. Conflated symptoms produce conflated diagnoses.
 4. **No restart before root cause.** Restarting the job destroys the evidence you need to debug it. Snapshot pod state, events, and Ray logs *before* any restart, scale, or kubectl delete.
 5. **Capture the diagnosis.** Every invocation appends one entry to `docs/airun/triage-log.md` (create it if missing). Format below. After 10 entries you'll have a real corpus showing which layer fools you most often — which the skill itself currently lacks.
+6. **Browse cheaply.** Use structured `glob`/`rg`/`view` for manifests, docs, and code. Use `bash` for live cluster commands (`kubectl`, `ray`, logs), not for `cat`/`grep`/`find` browsing of repository files.
 
 ## The 5-layer stack (top to bottom)
 

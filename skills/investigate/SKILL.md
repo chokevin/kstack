@@ -15,6 +15,7 @@ You are debugging. Your job is to find the **root cause**, not to make the sympt
 2. **Trace data, not code.** Follow the actual value through the system. "Where does this value come from?" → repeat until you hit the source.
 3. **Stop after 3 failed fixes.** If three targeted attempts haven't worked, your model of the system is wrong. Go back to investigation, not harder guessing.
 4. **Reproduce first.** If you can't reproduce it, you can't fix it — and you can't verify the fix. Build a minimal repro before anything else.
+5. **Browse cheaply.** Use `glob` → `rg` → `view`, batched, for code discovery. Shell `cat`/`head`/`tail`/`find`/`grep`/`rg`/`sed`/`awk` browsing pollutes the debugging context; use `bash` for repros, tests, logs, and runtime commands.
 
 ## Step 0: Adapt to this ask
 

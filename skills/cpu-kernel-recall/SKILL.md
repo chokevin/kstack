@@ -9,7 +9,7 @@ summary: Search local vault context and source references for OS/Linux kernel mo
 
 You are searching Kevin's local Obsidian vault and, only after that, relevant source trees for OS/Linux kernel module and host-kernel work. This skill is for CPU/host kernel surfaces: Linux kernel configs, driver modules, Secure Boot, AppArmor/LSM, eBPF, OFED/MOFED, GPUDirect driver plumbing, AgentBaker/VHD integration, and AKS GPU node host runtime issues.
 
-This skill is deliberately separate from `/kernel-recall`. If the work is about CUDA/Triton/CUTLASS/GEMM/attention compute kernels, use `/kernel-recall`. If the work is about Linux `.ko` modules, kernel build/config, host driver paths, or CPU-side runtime behavior that can confound GPU benchmarks, use this skill.
+This skill is deliberately separate from `/kernel-build`. If the work is about CUDA/Triton/CUTLASS/GEMM/attention compute kernels, use `/kernel-build`. If the work is about Linux `.ko` modules, kernel build/config, host driver paths, or CPU-side runtime behavior that can confound GPU benchmarks, use this skill.
 
 ## Iron Laws
 
@@ -19,6 +19,7 @@ This skill is deliberately separate from `/kernel-recall`. If the work is about 
 4. **Classify public source as External fact.** NVIDIA/Linux source explains mechanisms. It becomes a Result only when validated by a local repro, trace, benchmark, or project note.
 5. **Cite exact paths.** Cite vault notes as `relative/path.md:line` and source as `repo/path:line`.
 6. **Prefer operational gotchas.** Surface build/config traps, runtime fallbacks, and observability checks before speculative tuning.
+7. **Browse cheaply.** Use Copilot `glob`/`rg`/`view` for vault and source browsing, batched where possible. Use shell only for runtime commands or when structured tools cannot reach the content; keep fallback output bounded.
 
 ## Step 0: Adapt to this ask
 
@@ -69,11 +70,11 @@ Use these query clusters and prune to the ask:
 | RDMA/storage path | `OFED`, `MOFED`, `DOCA`, `RDMA`, `GPUDirect`, `nvidia-peermem`, `NVLink`, `NVSwitch`, `DMA-BUF`, `HMM`, `ATS`, `SVA` |
 | Evidence/results | `reproduced`, `verified`, `smoke test`, `nvidia-smi`, `dmesg`, `modprobe`, `Module.symvers`, `conftest`, `benchmark`, `trace` |
 
-Search breadth-first:
+Search breadth-first with Copilot's `rg` tool, scoped to `learnings/`, `research/`, `reckonings/`, `projects/`, and `retros/`. Use `glob` for filename discovery and `view` for targeted note sections. If forced into shell-only mode, keep output bounded:
 
 ```bash
 cd "$VAULT"
-grep -RInE 'linux-aks-gpu|linux-azure-nvidia|kernel module|Secure Boot|AppArmor|LSM|nvidia-peermem|OFED|MOFED|DOCA|GSP|GB200|GB300|GPU Operator|Module.symvers|conftest' learnings research reckonings projects retros --include='*.md'
+grep -RInE 'linux-aks-gpu|linux-azure-nvidia|kernel module|Secure Boot|AppArmor|LSM|nvidia-peermem|OFED|MOFED|DOCA|GSP|GB200|GB300|GPU Operator|Module.symvers|conftest' learnings research reckonings projects retros --include='*.md' | head -80
 ```
 
 Prioritize `learnings/`, then `research/` and `reckonings/`, then `projects/`.
@@ -128,7 +129,7 @@ Return:
 1. <concrete check>
 2. ...
 
-**What belongs back in /kernel-recall**
+**What belongs back in /kernel-build**
 - <only if there is actual CUDA/Triton/GEMM/attention compute-kernel evidence>
 ```
 

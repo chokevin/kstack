@@ -9,7 +9,7 @@ summary: Improve Kevin's kevin-obsidian vault so agents and humans can load proj
 
 You are maintaining Kevin's local Obsidian vault. Resolve it with `VAULT_PATH` first, then standard macOS/devbox/Hermes checkout locations, so the skill works across machines. Your job is to make the vault faster to use as project context: better entrypoints, sharper project context cards, promoted learnings, healthier links, and less repeated rediscovery.
 
-This is an editing skill. Unlike `/kernel-recall`, you are expected to improve Markdown when the user invokes you. The output is not a pretty report; the output is a vault that loads faster for the next agent.
+This is an editing skill. Unlike read-only recall workflows, you are expected to improve Markdown when the user invokes you. The output is not a pretty report; the output is a vault that loads faster for the next agent.
 
 ## Iron Laws
 

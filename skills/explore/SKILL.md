@@ -20,6 +20,7 @@ This skill exists because context is the scarcest resource in long agent session
 5. **Synthesize, don't concatenate.** The output is one coherent answer to the user's question, citing the subagents as evidence. Do not paste subagent summaries verbatim. If the synthesis is longer than the longest subagent summary, you're concatenating.
 6. **Cap the fan-out.** Default: ≤5 parallel subagents per round, ≤3 rounds. More than that and you're doing a research project — escalate to `/kstack-research`.
 7. **Trust but verify selectively.** If a subagent reports a critical fact (something a decision rests on), spot-check it once in the main thread (one targeted read or grep). Subagents hallucinate too. Don't audit everything — just the load-bearing claims.
+8. **Keep browsing out of bash.** Subagents should use structured filename/content/read tools (`glob`, `rg`, `view`) for source browsing and reserve shell commands for execution or runtime state. The whole point is a small, high-signal summary, not copied terminal output.
 
 ## When to use `/explore` vs. just doing it yourself
 
@@ -91,7 +92,7 @@ For dependent threads: do the prerequisite first, read its summary, then craft t
 For each subagent summary, identify any claim the answer to the user's question depends on. For each such claim, do **one** targeted check in the main thread:
 
 - "Subagent says function `foo` at `src/x.go:42` does Y." → `view` `src/x.go:40-60` to confirm.
-- "Subagent says no callers of `bar`." → one `grep` for `\bbar\b`.
+- "Subagent says no callers of `bar`." → one `rg` tool search for `\bbar\b`.
 - "Subagent says the API endpoint returns 200 on empty input." → don't actually call the API; check the test or the route handler source.
 
 Don't audit decorative claims. If a subagent says the file is "well-organized," who cares. Only audit the bricks the answer stands on.

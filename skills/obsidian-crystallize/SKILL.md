@@ -150,11 +150,11 @@ Seed candidates from:
 
 For each candidate, write a one-line thesis and route. Drop low-value candidates instead of hoarding them.
 
-Before writing new learnings, dedupe against existing crystals:
+Before writing new learnings, dedupe against existing crystals with Copilot's `rg` tool scoped to `learnings`, `contexts`, and `projects`; then `view` only the relevant sections. If forced into shell-only mode, keep output bounded:
 
 ```bash
 cd "$VAULT"
-grep -RInE '<key terms from candidate>' learnings contexts projects --include='*.md'
+grep -RInE '<key terms from candidate>' learnings contexts projects --include='*.md' | head -80
 ```
 
 If an existing learning already owns the idea, update discovery surfaces or the existing note instead of creating a near-duplicate.

@@ -20,6 +20,7 @@ This skill exists for the moment a senior engineer says: "before we adopt X / bu
 5. **Decide, don't summarize.** Output ends with one of four decisions: **ADOPT / ADAPT / SKIP / FURTHER-RESEARCH**. A research memo without a decision is theater.
 6. **Read budget = 30 sources, 90 minutes.** When you hit it, stop. State what you'd read next if given more. Sprawling research becomes unread research.
 7. **Receipts over recency.** A 2023 paper with 80 citations and reproducible code outweighs three 2026 hot-take threads. Date is a signal, not a verdict.
+8. **Browse cheaply.** For local repos and checked-out sources, use `glob` → `rg` → `view` and batch reads. Use web/GitHub tools for external sources. Do not shell out to `cat`/`grep`/`find` for source browsing unless a structured tool cannot reach the content.
 
 ## Source-type playbook
 
