@@ -27,23 +27,24 @@ Use when:
 1. **One goal, observable finish.** The goal is a single user-visible outcome with checks that prove done.
 2. **The harness owns the loop.** Do not stop at a plan, first result, failed attempt, tool delay, ordinary blocker, or plausible-looking success if the user asked for a result. Keep pursuing until success survives the completion gate or the user explicitly stops.
 3. **Measure before moving.** Every iteration compares the current result against the done criteria before choosing the next change.
-4. **Start each loop with skill-chain triage.** At the beginning of every loop, consider `/investigate` -> `/plan` -> `/grill-me` in that order; invoke applicable skills and record skip reasons for the rest.
-5. **Keep an approach portfolio.** Every loop considers multiple distinct solution strategies before committing to one; if viable strategies are independent, fan them out.
-6. **Finish only after idea exhaustion.** Even when checks pass, the goal cannot complete until the end-of-loop sweep finds no concrete, in-scope ideas left to improve proof, quality, reliability, coverage, or user value.
-7. **Persist before waiting.** Before any long wait, handoff, context-heavy branch, or session end, write enough state that another agent can resume without rereading the whole conversation.
-8. **Delegate aggressively.** If subwork is independent, fan it out to agents/sessions instead of serializing it in the main thread.
-9. **The main thread is the scheduler.** Once work is delegated, do not duplicate the same investigation in the coordinator. Track ownership, dependencies, artifacts, and verification.
-10. **Improve deliberately.** Each iteration needs a hypothesis: what is unsatisfactory, why, and what change should improve it.
-11. **Failure feeds the next iteration.** A failed check, unclear proof, partial proxy, or "probably fixed" result becomes a new hypothesis and work item, not a stopping point.
-12. **Completion is guilty until proven done.** Before final output, run the completion gate and actively try to disprove success.
-13. **Walls are routing events, not exits.** A wall triggers restart, reroute, proxy verification, external-dependency tracking, or more delegation. It is not a reason to declare the goal done or abandoned.
-14. **Kill bad routes quickly.** A route that stops moving the done metric, repeats the same failure, or becomes mostly explanation is not "progress". Mark it `killed`/`superseded`, preserve what it disproved, reclaim its scope, and launch a materially different route if the target remains unmet.
-15. **Existence proofs override despair.** If the user or evidence shows the target has been achieved elsewhere, do not treat local failures as impossibility. Treat them as evidence that current assumptions are wrong; restart or fan out into new route families.
-16. **Restart when the path is bad.** If repeated iterations are not moving the metric, assumptions are wrong, or the work is in a rabbit hole, return to the original goal and choose a new approach.
-17. **Use current docs when freshness matters.** For libraries, APIs, CLIs, cloud services, models, or fast-moving tools, check the latest relevant docs/source before relying on memory.
-18. **Decide to unblock.** Missing product/scope choices are not stop conditions. Pick the most reversible, conventional, or user-beneficial default and document it in the decision ledger.
-19. **Constraints are hard.** Preserve safety and user rules: no unsafe repo writes, unapproved deletes, unwanted commits, AI commit trailers, or content-policy workarounds. If a requested action is disallowed, continue toward the goal through the nearest safe substitute.
-20. **Questions are last resort.** Ask only when a non-negotiable constraint prevents even a safe substitute. Product/scope ambiguity should become an explicit assumption, not a question.
+4. **Scope cuts cannot hide the ask.** Every done check and non-goal must trace back to the original user ask, source memo, issue, PR comment, or an explicit documented decision. If you choose an MVP/phase, label it as a phase result and keep the parent goal open until every in-scope source gap is done, blocked-external, or explicitly user-deferred.
+5. **Start each loop with skill-chain triage.** At the beginning of every loop, consider `/investigate` -> `/plan` -> `/grill-me` in that order; invoke applicable skills and record skip reasons for the rest.
+6. **Keep an approach portfolio.** Every loop considers multiple distinct solution strategies before committing to one; if viable strategies are independent, fan them out.
+7. **Finish only after idea exhaustion.** Even when checks pass, the goal cannot complete until the end-of-loop sweep finds no concrete, in-scope ideas left to improve proof, quality, reliability, coverage, or user value.
+8. **Persist before waiting.** Before any long wait, handoff, context-heavy branch, or session end, write enough state that another agent can resume without rereading the whole conversation.
+9. **Delegate aggressively.** If subwork is independent, fan it out to agents/sessions instead of serializing it in the main thread.
+10. **The main thread is the scheduler.** Once work is delegated, do not duplicate the same investigation in the coordinator. Track ownership, dependencies, artifacts, and verification.
+11. **Improve deliberately.** Each iteration needs a hypothesis: what is unsatisfactory, why, and what change should improve it.
+12. **Failure feeds the next iteration.** A failed check, unclear proof, partial proxy, or "probably fixed" result becomes a new hypothesis and work item, not a stopping point.
+13. **Completion is guilty until proven done.** Before final output, run the completion gate and actively try to disprove success.
+14. **Walls are routing events, not exits.** A wall triggers restart, reroute, proxy verification, external-dependency tracking, or more delegation. It is not a reason to declare the goal done or abandoned.
+15. **Kill bad routes quickly.** A route that stops moving the done metric, repeats the same failure, or becomes mostly explanation is not "progress". Mark it `killed`/`superseded`, preserve what it disproved, reclaim its scope, and launch a materially different route if the target remains unmet.
+16. **Existence proofs override despair.** If the user or evidence shows the target has been achieved elsewhere, do not treat local failures as impossibility. Treat them as evidence that current assumptions are wrong; restart or fan out into new route families.
+17. **Restart when the path is bad.** If repeated iterations are not moving the metric, assumptions are wrong, or the work is in a rabbit hole, return to the original goal and choose a new approach.
+18. **Use current docs when freshness matters.** For libraries, APIs, CLIs, cloud services, models, or fast-moving tools, check the latest relevant docs/source before relying on memory.
+19. **Decide to unblock.** Missing product/scope choices are not stop conditions. Pick the most reversible, conventional, or user-beneficial default and document it in the decision ledger.
+20. **Constraints are hard.** Preserve safety and user rules: no unsafe repo writes, unapproved deletes, unwanted commits, AI commit trailers, or content-policy workarounds. If a requested action is disallowed, continue toward the goal through the nearest safe substitute.
+21. **Questions are last resort.** Ask only when a non-negotiable constraint prevents even a safe substitute. Product/scope ambiguity should become an explicit assumption, not a question.
 
 ## Harness state
 
@@ -53,8 +54,10 @@ Keep this state in the conversation. For multi-step, multi-agent, long-running, 
 ## /goal
 
 **Goal:** <one-sentence user-visible outcome>
+**Source contract:** <original ask + source artifacts/findings the goal must satisfy>
 **Done when:** <2-5 observable checks>
 **Non-goals:** <scope cuts>
+**Scope ledger:** <in-scope source gaps, user-approved deferrals, and phase/MVP boundaries>
 **Constraints:** <hard rules>
 **Decision ledger:** <defaults chosen to fill missing blanks>
 **Freshness needed:** <docs/source to check, or "none">
@@ -99,8 +102,12 @@ For each route, track:
 
 1. **Define the target.**
    - Restate the arbitrary goal as one outcome.
+   - Extract a **source contract**: the original user ask plus any source memo, issue, PR comment, research findings, or explicit examples that define the expected gap closure.
    - Define 2-5 observable done checks.
    - Name non-goals and constraints.
+   - Build a **scope ledger** that maps every source-contract item to one of: `done-check`, `work-item`, `non-goal`, `blocked-external`, or `user-deferred`.
+   - Reject hidden scope shrinkage: a requested/source-contract gap cannot become a non-goal merely because the first implementation route is an MVP.
+   - If a phase/MVP is chosen, rename the current result as a phase and keep the parent goal unmet unless the user explicitly changes the goal.
    - Fill missing product/scope blanks with documented defaults.
    - Decide whether current documentation/source freshness matters.
    - Choose run mode: `single-session` for compact tasks, `long-horizon` for work with waits/resume risk, `swarm` for broad independent subwork.
@@ -120,7 +127,7 @@ For each route, track:
 5. **Run the plan-stage Opus review when applicable.**
    - For `swarm`, `long-horizon`, high-impact, expensive, or ambiguous goals, launch an Opus reviewer after the target, done checks, non-goals, constraints, budget, approach portfolio, and draft work queue exist but before broad execution.
    - Use `claude-opus-4.8` by default, or the highest-context Opus 4.8 variant available in the host. If Opus is unavailable, record `skipped: Opus unavailable` and use the strongest available critique lane.
-   - Ask Opus to find concrete failure modes in the done checks, non-goals, constraints, budget, fan-out split, approach portfolio, and routing-wall/completion risks. The reviewer must produce specific patch suggestions, not a rewrite.
+   - Ask Opus to find concrete failure modes in the source contract, scope ledger, done checks, non-goals, constraints, budget, fan-out split, approach portfolio, and routing-wall/completion risks. The reviewer must produce specific patch suggestions, not a rewrite.
    - Reconcile the Opus result into Open doubts, the decision ledger, or work queue before executing the plan. A confirmed Opus blocker becomes a gate failure.
    - Skip only for a single-session atomic goal with low ambiguity and no agent fan-out; record the skip reason.
 6. **Build durable state.**
@@ -147,7 +154,7 @@ For each route, track:
    - If not, update Current result, Gap, and Next iteration.
    - Reconcile completed agent outputs into the work queue before launching follow-on work.
 11. **Run the end-of-loop idea sweep.**
-   - List concrete ideas from failed checks, open doubts, unused approaches, agent outputs, critique, test gaps, docs/source gaps, logs, TODOs, and user-visible rough edges.
+   - List concrete ideas from failed checks, source-contract items not mapped to proof, open doubts, unused approaches, agent outputs, critique, test gaps, docs/source gaps, logs, TODOs, and user-visible rough edges.
    - Classify each idea as `ready`, `fan-out`, `blocked-external`, `out-of-scope`, `dominated`, `duplicate`, or `not-worth-it: <why>`.
    - Continue or delegate every `ready` and `fan-out` idea that is in scope and could materially improve a done check, its proof quality, or a stated reliability/security non-functional requirement.
    - Completion is allowed only when no `ready` or `fan-out` ideas remain.
@@ -159,8 +166,8 @@ For each route, track:
 13. **Run the review-stage Opus check when applicable.**
    - Before declaring `/goal — achieved`, accepting a routing-wall heartbeat, or merging a high-impact result, launch or reuse an Opus review-stage critique unless a fresh Opus review already covers the same state.
    - Use `claude-opus-4.8` by default, or the highest-context Opus 4.8 variant available in the host. If Opus is unavailable, record the skip reason and use `/grill-me`, `rubber-duck`, or another strongest available reviewer.
-   - The review-stage brief must include direct proof for each done check, the latest approach portfolio, all agent outputs, rejected ideas, remaining idea-sweep classifications, budget state, and open doubts.
-   - Opus should try to disprove success, identify unreconciled agents, name any ready/fan-out ideas still in scope, and challenge weak `blocked-external` / `dominated` / `not-worth-it` labels.
+   - The review-stage brief must include the source contract, scope ledger, direct proof for each done check, latest approach portfolio, all agent outputs, rejected ideas, remaining idea-sweep classifications, budget state, and open doubts.
+   - Opus should try to disprove success, identify source-contract items that were hidden in non-goals, identify unreconciled agents, name any ready/fan-out ideas still in scope, and challenge weak `blocked-external` / `dominated` / `not-worth-it` labels.
    - Reconcile every confirmed finding before the completion gate can pass.
 14. **Run the completion gate.**
    - If all checks appear to pass, try to disprove success before final output.
@@ -220,14 +227,16 @@ Brief contract:
 
 ```markdown
 Goal:
+Source contract:
 Done checks:
 Non-goals:
+Scope ledger:
 Constraints:
 Budget:
 Approach portfolio:
 Draft work queue / fan-out:
 Known evidence:
-Ask: Find concrete plan-stage failure modes, weak assumptions, missing constraints, poor fan-out boundaries, budget risks, and routing/completion traps. Return only actionable blockers or patch suggestions.
+Ask: Find concrete plan-stage failure modes, hidden scope shrinkage, source-contract items missing from done checks/work items, weak assumptions, missing constraints, poor fan-out boundaries, budget risks, and routing/completion traps. Return only actionable blockers or patch suggestions.
 ```
 
 Stop condition: Opus returns no blockers, or all blockers have been converted into work items, Open doubts, or explicit documented decisions.
@@ -240,6 +249,8 @@ Brief contract:
 
 ```markdown
 Goal:
+Source contract:
+Scope ledger:
 Done checks and direct proof:
 Current result:
 Agent outputs and artifacts:
@@ -247,7 +258,7 @@ Rejected approaches:
 Idea-sweep classifications:
 Budget state:
 Open doubts:
-Ask: Try to disprove success. Identify unreconciled agents, stale/proxy proof, untested realistic failures, unstarted ready/fan-out ideas, weak bucket labels, or routing-wall exits that should continue instead.
+Ask: Try to disprove success. Identify source-contract items hidden in non-goals or phase/MVP language, unreconciled agents, stale/proxy proof, untested realistic failures, unstarted ready/fan-out ideas, weak bucket labels, or routing-wall exits that should continue instead.
 ```
 
 Stop condition: Opus returns no gate-blocking findings, or every confirmed finding is reconciled into the proof ledger, work queue, or decision ledger.
@@ -338,6 +349,8 @@ Run this gate immediately before any `/goal — achieved` output. The answer to 
 | Gate | Continue instead of finishing when... |
 |------|--------------------------------------|
 | Loop preflight | The latest loop did not explicitly consider `/investigate` -> `/plan` -> `/grill-me`, or skipped one without a reason. |
+| Source-contract coverage | Any original ask/source finding/example is not mapped to direct proof, an active/done work item, a named hard blocker, or an explicit user-approved deferral. |
+| Scope integrity | A requested gap was moved into non-goals, `out-of-scope`, `dominated`, or `not-worth-it` because the current implementation is only an MVP/phase, rather than because it violates the original goal or was user-deferred. |
 | Approach portfolio | The latest loop did not compare at least two materially different approaches, or did not explain why viable independent approaches were not fanned out. |
 | Idea exhaustion | The end-of-loop sweep found a concrete `ready` or `fan-out` idea that could still improve proof, quality, reliability, coverage, or user value. |
 | Done-check proof | Any done check lacks direct, current evidence. |
@@ -480,8 +493,10 @@ When starting:
 ## /goal — harness started
 
 **Goal:** <outcome>
+**Source contract:** <original ask + source artifacts/findings the goal must satisfy>
 **Done when:** <observable checks>
 **Non-goals:** <scope cuts>
+**Scope ledger:** <in-scope source gaps, user-approved deferrals, and phase/MVP boundaries>
 **Constraints:** <hard rules>
 **Decision ledger:** <defaults chosen to fill missing blanks>
 **Freshness needed:** <docs/source or none>
@@ -527,7 +542,9 @@ At completion:
 ## /goal — achieved
 
 **Goal:** <outcome>
+**Source contract:** <what the original ask/source requires>
 **Proof:** <checks/artifacts showing done>
+**Scope ledger:** <why every source-contract item is proven, blocked, non-goal by original scope, or user-deferred>
 **Completion gate:** <why no gate item forced another iteration>
 **Loop preflight:** <latest /investigate -> /plan -> /grill-me decisions>
 **Approach portfolio:** <why no remaining approach needs pursuit/fan-out>
@@ -551,6 +568,9 @@ At completion:
 - Treating a plain-text "next heartbeat" as scheduled work when the host did not create a real workflow/reminder.
 - Letting a non-responsive agent keep a goal open forever instead of timing it out and reclaiming its scope.
 - Using `blocked-external`, `dominated`, or `not-worth-it` labels without the required evidence to avoid continuing.
+- Reclassifying a user-requested/source-contract gap as a non-goal because the first route delivered only an MVP.
+- Reporting `/goal — achieved` for a phase/MVP while the parent goal still has ready or fan-out work.
+- Citing "documented as out of scope" as proof when the user did not approve that scope cut and the original ask included the gap.
 - Reporting `/goal — achieved` before running the completion gate.
 - Skipping `/investigate` -> `/plan` -> `/grill-me` preflight because the next action feels obvious.
 - Considering only the first plausible solution path.
